@@ -14,6 +14,7 @@ Source0:	http://dl-ak.solidworks.com/nonsecure/draftsight/%{dsver}/draftSight.rp
 BuildRequires:	desktop-file-utils
 
 Requires:	libaudio.so.2
+Requires:	libGLU.so.1
 
 Provides:	lfbmp.so.18  
 Provides:	lfcmp.so.18  
