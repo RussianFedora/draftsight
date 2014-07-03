@@ -5,7 +5,7 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
 Version:	2014.3.70
-Release:	2%{?dist}.4
+Release:	2.1%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
@@ -148,106 +148,145 @@ rpm2cpio %{SOURCE0} | cpio -idV --quiet
 
 # Remove broken link:
 rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
+
+# Fix *.desktop file and mime-types:
 patch -p1 < %{SOURCE1}
-mkdir -p %{buildroot}/usr/share/applications
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop %{buildroot}/usr/share/applications/rfremix-draftsight.desktop
+
+# Move *.desktop file to %{_datadir}:
+mkdir -p %{buildroot}%{_datadir}/applications
+mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop %{buildroot}%{_datadir}/applications/dassault-systemes_draftsight.desktop
+
+# Install mime-types:
+mkdir -p %{buildroot}%{_datadir}/mime/packages
+mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_draftsight.xml
 popd
 
+# Create the link at %{_bindir} pointing to the executable binary: 
 mkdir -p %{buildroot}%{_bindir}
 pushd %{buildroot}%{_bindir}
 ln -s ../../../opt/dassault-systemes/DraftSight/Linux/DraftSight draftsight
 popd
 
-%post
-pushd /opt/dassault-systemes/DraftSight/Resources
-xdg-mime install --novendor --mode system dassault-systemes_draftsight-dwg.xml
-xdg-mime install --novendor --mode system dassault-systemes_draftsight-dwt.xml
-xdg-mime install --novendor --mode system dassault-systemes_draftsight-dxf.xml
+# Install pixmaps:
+for SIZE in 16 32 48 64 128; do
+  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps
+  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes
+  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps
+  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps/dassault-systemes_draftsight.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/dassault-systemes_draftsight.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps/dassault-systemes_draftsight.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/dassault-systemes_draftsight.png
+done
+mkdir -p %{buildroot}%{_datadir}/pixmaps
+cp %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/dassault-systemes_draftsight.png %{buildroot}%{_datadir}/pixmaps/dassault-systemes_draftsight.png
+
+pushd %{buildroot}
+rm -rf %{buildroot}/opt/dassault-systemes/DraftSight/Resources
 popd
 
-#cd "//opt/dassault-systemes/DraftSight/Resources" && xdg-mime install --novendor --mode system "dassault-systemes_draftsight-dwg.xml"
-#cd "//opt/dassault-systemes/DraftSight/Resources" && xdg-mime install --novendor --mode system "dassault-systemes_draftsight-dxf.xml"
-#cd "//opt/dassault-systemes/DraftSight/Resources" && xdg-mime install --novendor --mode system "dassault-systemes_draftsight-dwt.xml"
-# TODO: Set mime types "application/vnd.dassault-systems.*" for all users
-
-for SIZE in 16 32 48 64 128; do
-    OPTS="--noupdate --novendor --mode system --size ${SIZE}"
-    pushd /opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}
-#    cd "//opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}"
-    xdg-icon-resource install ${OPTS} --context apps program.png "rfremix-draftsight"
-    xdg-icon-resource install ${OPTS} --context apps --theme gnome program.png "rfremix-draftsight"
-    xdg-icon-resource install ${OPTS} --context mimetypes file-dwg.png "application/vnd.dassault-systemes.draftsight-dwg"
-    xdg-icon-resource install ${OPTS} --context mimetypes --theme gnome file-dwg.png "application/vnd.dassault-systemes.draftsight-dwg"
-    xdg-icon-resource install ${OPTS} --context mimetypes file-dxf.png "application/vnd.dassault-systemes.draftsight-dxf"
-    xdg-icon-resource install ${OPTS} --context mimetypes --theme gnome file-dxf.png "application/vnd.dassault-systemes.draftsight-dxf"
-    xdg-icon-resource install ${OPTS} --context mimetypes file-dwt.png "application/vnd.dassault-systemes.draftsight-dwt"
-    xdg-icon-resource install ${OPTS} --context mimetypes --theme gnome file-dwt.png "application/vnd.dassault-systemes.draftsight-dwt"
-    popd
-done
-
-xdg-icon-resource forceupdate
-#cd "//opt/dassault-systemes/DraftSight/Resources" && xdg-desktop-menu install --novendor --mode system "dassault-systemes_draftsight.desktop"
-[ -x /usr/bin/update-mime-database ] && /usr/bin/update-mime-database /usr/share/mime &> /dev/null || :
-
-# prepare for dongle
+%post
+# Prepare for dongle:
 if [ /etc/udev/rules.d/ ]; then
-  echo "BUS==\"usb\", SYSFS{idVendor}==\"096e\", MODE==\"0666\""> /etc/udev/rules.d/ft-rockey.rules
+  echo "BUS==\"usb\", SYSFS{idVendor}==\"096e\", MODE==\"0666\"" > /etc/udev/rules.d/ft-rockey.rules
 fi
 
-update-desktop-database &> /dev/null || :
-touch --no-create /usr/share/icons/hicolor &> /dev/null || :
+if [ -x /usr/bin/touch ]; then
+touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
+touch --no-create %{_datadir}/icons/gnome &> /dev/null || :
+fi
+
+#if [ -x "`which update-menus 2>/dev/null`" ]; then
+#  update-menus || :
+#fi
+
+if [ -x /usr/bin/update-desktop-database ]; then
+/usr/bin/update-desktop-database %{_datadir}/applications/ || :
+#&> /dev/null || :
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+/usr/bin/update-mime-database %{_datadir}/mime/ || :
+#&> /dev/null || :
+fi
+
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
-  /usr/bin/gtk-update-icon-cache --quiet /usr/share/icons/hicolor || :
+  /usr/bin/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &> /dev/null || :
+fi
+
+if [ -x /usr/bin/gtk-update-icon-cache ]; then
+  /usr/bin/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome &> /dev/null || :
 fi
 
 %preun
-pushd /opt/dassault-systemes/DraftSight/Resources
-xdg-mime uninstall --novendor --mode system dassault-systemes_draftsight-dwg.xml
-xdg-mime uninstall --novendor --mode system dassault-systemes_draftsight-dwt.xml
-xdg-mime uninstall --novendor --mode system dassault-systemes_draftsight-dxf.xml
-popd
-
-#xdg-mime uninstall --novendor --mode system "//opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml"
-#xdg-mime uninstall --novendor --mode system "//opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml"
-#xdg-mime uninstall --novendor --mode system "//opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml"
-
-for SIZE in 16 32 48 64 128; do
-    OPTS="--noupdate --mode system --size ${SIZE}"
-    xdg-icon-resource uninstall ${OPTS} --context apps "rfremix-draftsight"
-    xdg-icon-resource uninstall ${OPTS} --context apps --theme gnome "rfremix-draftsight"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes "application/vnd.dassault-systemes.draftsight-dwg"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes --theme gnome "application/vnd.dassault-systemes.draftsight-dwg"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes "application/vnd.dassault-systemes.draftsight-dxf"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes --theme gnome "application/vnd.dassault-systemes.draftsight-dxf"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes "application/vnd.dassault-systemes.draftsight-dwt"
-    xdg-icon-resource uninstall ${OPTS} --context mimetypes --theme gnome "application/vnd.dassault-systemes.draftsight-dwt"
-done
-
-xdg-icon-resource forceupdate
-#cd "//opt/dassault-systemes/DraftSight/Resources" && xdg-desktop-menu uninstall --novendor --mode system "dassault-systemes_draftsight.desktop"
-[ -x /usr/bin/update-mime-database ] && /usr/bin/update-mime-database /usr/share/mime &> /dev/null || :
-
-# remove dongle preparing
+# Remove dongle preparing:
 [ /etc/udev/rules.d/ ] && rm /etc/udev/rules.d/ft-rockey.rules
 
 %postun
-
-if [ $1 -eq 0 ] ; then
-    touch --no-create /usr/share/icons/hicolor &>/dev/null
-    gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null || :
+if [ -x /usr/bin/touch ]; then
+touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
+touch --no-create %{_datadir}/icons/gnome &> /dev/null || :
 fi
-update-desktop-database &> /dev/null || :
+
+#if [ -x "`which update-menus 2>/dev/null`" ]; then
+#  update-menus || :
+#fi
+
+if [ -x /usr/bin/update-desktop-database ]; then
+/usr/bin/update-desktop-database %{_datadir}/applications/ || :
+#&> /dev/null || :
+fi
+
+if [ -x /usr/bin/update-mime-database ]; then
+/usr/bin/update-mime-database %{_datadir}/mime/ || :
+#&> /dev/null || :
+fi
+
+if [ -x /usr/bin/gtk-update-icon-cache ]; then
+  /usr/bin/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &> /dev/null || :
+fi
+
+if [ -x /usr/bin/gtk-update-icon-cache ]; then
+  /usr/bin/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome &> /dev/null || :
+fi
 
 %posttrans
-gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null || :
+gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %files
 /opt/dassault-systemes
 %{_bindir}/draftsight
-%{_datadir}/applications/rfremix-draftsight.desktop
+%{_datadir}/applications/dassault-systemes_draftsight.desktop
+%{_datadir}/icons/hicolor/16x16/apps/*.png
+%{_datadir}/icons/hicolor/16x16/mimetypes/*.png
+%{_datadir}/icons/gnome/16x16/apps/*.png
+%{_datadir}/icons/gnome/16x16/mimetypes/*.png
+%{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/32x32/mimetypes/*.png
+%{_datadir}/icons/gnome/32x32/apps/*.png
+%{_datadir}/icons/gnome/32x32/mimetypes/*.png
+%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/48x48/mimetypes/*.png
+%{_datadir}/icons/gnome/48x48/apps/*.png
+%{_datadir}/icons/gnome/48x48/mimetypes/*.png
+%{_datadir}/icons/hicolor/64x64/apps/*.png
+%{_datadir}/icons/hicolor/64x64/mimetypes/*.png
+%{_datadir}/icons/gnome/64x64/apps/*.png
+%{_datadir}/icons/gnome/64x64/mimetypes/*.png
+%{_datadir}/icons/hicolor/128x128/apps/*.png
+%{_datadir}/icons/hicolor/128x128/mimetypes/*.png
+%{_datadir}/icons/gnome/128x128/apps/*.png
+%{_datadir}/icons/gnome/128x128/mimetypes/*.png
+%{_datadir}/pixmaps/dassault-systemes_draftsight.png
+%{_datadir}/mime/packages/dassault-systemes_draftsight.xml
 %{_localstatedir}/opt/dassault-systemes
 
 %changelog
+* Fri Jul 04 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.1.R
+- fix missing mime-types
+- change version numbering
+- clean up spec file
+
 * Wed Jul 02 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.R.4
 #- fix missing mime-types (POOR ATTEMPT!)
 - add some dependences
