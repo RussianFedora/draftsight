@@ -5,7 +5,9 @@ if [[ -f ${1} ]];then
    FILEHASH=$(md5sum ${FULLFILEPATH} | cut -f1 -d" " | cut -c1-8)
    mkdir -p /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
    ln -s ${FULLFILEPATH} /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/${FILEHASH}.${FULLFILEPATH##*.}
-   /opt/dassault-systemes/DraftSight/Linux/DraftSight /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/${FILEHASH}.${FULLFILEPATH##*.}
+   pushd /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
+   /opt/dassault-systemes/DraftSight/Linux/DraftSight ${FILEHASH}.${FULLFILEPATH##*.}
+   popd
    rm -rf /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
    else
    /opt/dassault-systemes/DraftSight/Linux/DraftSight ${1}
