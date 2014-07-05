@@ -158,7 +158,9 @@ mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_dra
 
 # Install mime-types:
 mkdir -p %{buildroot}%{_datadir}/mime/packages
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_draftsight.xml
+mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_draftsight-dwg.xml
+mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_draftsight-dwt.xml
+mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_draftsight-dxf.xml
 popd
 
 # Create the link at %{_bindir} pointing to the executable binary: 
@@ -173,16 +175,26 @@ for SIZE in 16 32 48 64 128; do
   mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes
   mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps
   mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps/dassault-systemes_draftsight.png
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/dassault-systemes_draftsight.png
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps/dassault-systemes_draftsight.png
-  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/dassault-systemes_draftsight.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps/dassault-systemes.draftsight.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps/dassault-systemes.draftsight.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dwg.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dwg.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dxf.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dxf.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dwt.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.draftsight-dwt.png
 done
 mkdir -p %{buildroot}%{_datadir}/pixmaps
-cp %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/dassault-systemes_draftsight.png %{buildroot}%{_datadir}/pixmaps/dassault-systemes_draftsight.png
+cp %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/dassault-systemes.draftsight.png %{buildroot}%{_datadir}/pixmaps/dassault-systemes.draftsight.png
 
+# Remove unused resources:
 pushd %{buildroot}
 rm -rf %{buildroot}/opt/dassault-systemes/DraftSight/Resources
+popd
+
+# Fix missing genltshp.shx:
+pushd %{buildroot}/opt/dassault-systemes/DraftSight/Fonts
+ln -s LTypeShp.shx genltshp.shx
 popd
 
 %post
@@ -196,18 +208,12 @@ touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome &> /dev/null || :
 fi
 
-#if [ -x "`which update-menus 2>/dev/null`" ]; then
-#  update-menus || :
-#fi
-
 if [ -x /usr/bin/update-desktop-database ]; then
-/usr/bin/update-desktop-database %{_datadir}/applications/ || :
-#&> /dev/null || :
+/usr/bin/update-desktop-database %{_datadir}/applications/ &> /dev/null || :
 fi
 
 if [ -x /usr/bin/update-mime-database ]; then
-/usr/bin/update-mime-database %{_datadir}/mime/ || :
-#&> /dev/null || :
+/usr/bin/update-mime-database %{_datadir}/mime/ &> /dev/null || :
 fi
 
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
@@ -220,7 +226,9 @@ fi
 
 %preun
 # Remove dongle preparing:
-[ /etc/udev/rules.d/ ] && rm /etc/udev/rules.d/ft-rockey.rules
+if [ /etc/udev/rules.d/ft-rockey.rules ]; then
+rm /etc/udev/rules.d/ft-rockey.rules
+fi
 
 %postun
 if [ -x /usr/bin/touch ]; then
@@ -228,18 +236,12 @@ touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome &> /dev/null || :
 fi
 
-#if [ -x "`which update-menus 2>/dev/null`" ]; then
-#  update-menus || :
-#fi
-
 if [ -x /usr/bin/update-desktop-database ]; then
-/usr/bin/update-desktop-database %{_datadir}/applications/ || :
-#&> /dev/null || :
+/usr/bin/update-desktop-database %{_datadir}/applications/ &> /dev/null || :
 fi
 
 if [ -x /usr/bin/update-mime-database ]; then
-/usr/bin/update-mime-database %{_datadir}/mime/ || :
-#&> /dev/null || :
+/usr/bin/update-mime-database %{_datadir}/mime/ &> /dev/null || :
 fi
 
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
@@ -256,7 +258,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files
 /opt/dassault-systemes
 %{_bindir}/draftsight
-%{_datadir}/applications/dassault-systemes_draftsight.desktop
+%{_datadir}/applications/*.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/16x16/mimetypes/*.png
 %{_datadir}/icons/gnome/16x16/apps/*.png
@@ -277,18 +279,23 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/128x128/mimetypes/*.png
 %{_datadir}/icons/gnome/128x128/apps/*.png
 %{_datadir}/icons/gnome/128x128/mimetypes/*.png
-%{_datadir}/pixmaps/dassault-systemes_draftsight.png
-%{_datadir}/mime/packages/dassault-systemes_draftsight.xml
+%{_datadir}/pixmaps/dassault-systemes.draftsight.png
+%{_datadir}/mime/packages/*.xml
 %{_localstatedir}/opt/dassault-systemes
 
 %changelog
-* Fri Jul 04 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.1.R
+* Fri Jul 05 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.1.R
 - fix missing mime-types
+- fix missing genltshp.shx
+- fix %preun
+
+* Fri Jul 04 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
+#- fix missing mime-types #2 (POOR ATTEMPT!)
 - change version numbering
 - clean up spec file
 
 * Wed Jul 02 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.R.4
-#- fix missing mime-types (POOR ATTEMPT!)
+#- fix missing mime-types #1 (POOR ATTEMPT!)
 - add some dependences
 - clean up spec file
 
