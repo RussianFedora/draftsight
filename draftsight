@@ -8,7 +8,10 @@ if [[ -f ${1} ]];then
    pushd /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
    /opt/dassault-systemes/DraftSight/Linux/DraftSight ${FILEHASH}.${FULLFILEPATH##*.}
    popd
-   rm -rf /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
+   if [ /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/ ]; then
+      rm -rf /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
+   fi
+   
    else
    /opt/dassault-systemes/DraftSight/Linux/DraftSight ${1}
 fi
