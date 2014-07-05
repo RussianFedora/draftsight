@@ -1,0 +1,12 @@
+#!/usr/bin/sh
+#A wrapper script for the workaround a bug with non-latin characters contained in the CAD file name and path.
+if [[ -f ${1} ]];then
+   FULLFILEPATH=$(cd $(dirname ${1}) && pwd)/$(basename ${1})
+   FILEHASH=$(md5sum ${FULLFILEPATH} | cut -f1 -d" " | cut -c1-8)
+   mkdir -p /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
+   ln -s ${FULLFILEPATH} /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/${FILEHASH}.${FULLFILEPATH##*.}
+   /opt/dassault-systemes/DraftSight/Linux/DraftSight /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/${FILEHASH}.${FULLFILEPATH##*.}
+   rm -rf /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
+   else
+   /opt/dassault-systemes/DraftSight/Linux/DraftSight ${1}
+fi

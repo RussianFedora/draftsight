@@ -1,12 +1,12 @@
 diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop
---- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop	2014-07-05 13:32:53.189674157 +0400
-+++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop	2014-07-05 13:10:06.000000000 +0400
+--- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop	2014-07-06 01:17:39.570602343 +0400
++++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight.desktop	2014-07-06 01:22:05.792772622 +0400
 @@ -2,10 +2,10 @@
  Name=DraftSight
  Comment=Editing CAD images
  GenericName=DraftSight
 -Exec="/opt/dassault-systemes/DraftSight/Linux/DraftSight"
-+Exec="/opt/dassault-systemes/DraftSight/Linux/DraftSight" %F
++Exec=draftsight %F
  Path=/opt/dassault-systemes/DraftSight/Linux
  Type=Application
  Terminal=false
@@ -16,8 +16,8 @@ diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsi
 +MimeType=image/vnd.dwg;image/vnd.dwt;image/vnd.dxf;application/vnd.dassault-systemes.draftsight-dwg;application/vnd.dassault-systemes.draftsight-dwt;application/vnd.dassault-systemes.draftsight-dxf;
 +Categories=Application;Graphics;
 diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml
---- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml	2014-07-05 13:32:53.188674137 +0400
-+++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml	2014-07-05 13:16:12.000000000 +0400
+--- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml	2014-07-06 01:17:39.570602343 +0400
++++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwg.xml	2014-07-06 01:20:54.472383958 +0400
 @@ -1,7 +1,6 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
@@ -28,8 +28,8 @@ diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsi
      <magic priority="59">
        <match type="string" offset="0" value="AC10"/>
 diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml
---- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml	2014-07-05 13:32:53.188674137 +0400
-+++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml	2014-07-05 13:03:08.000000000 +0400
+--- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml	2014-07-06 01:17:39.570602343 +0400
++++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dwt.xml	2014-07-06 01:20:54.472383958 +0400
 @@ -1,6 +1,6 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
@@ -39,8 +39,8 @@ diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsi
      <magic priority="59">
        <match type="string" offset="0" value="AC10"/>
 diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml
---- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml	2014-07-05 13:32:53.189674157 +0400
-+++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml	2014-07-05 13:03:02.000000000 +0400
+--- a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml	2014-07-06 01:17:39.570602343 +0400
++++ b/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsight-dxf.xml	2014-07-06 01:20:54.473383978 +0400
 @@ -1,6 +1,6 @@
  <?xml version="1.0" encoding="UTF-8"?>
  <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
