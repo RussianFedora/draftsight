@@ -156,6 +156,7 @@ patch -p1 < %{SOURCE1}
 # Install a wrapper script for the workaround a bug with non-latin characters contained in the CAD file name and path: 
 mkdir -p %{buildroot}%{_bindir}
 install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/%{name}
+chmod +x %{buildroot}%{_bindir}/%{name}
 
 # Move *.desktop file to %{_datadir}:
 mkdir -p %{buildroot}%{_datadir}/applications
