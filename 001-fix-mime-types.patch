@@ -6,7 +6,7 @@ diff -uNr a/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_draftsi
  Comment=Editing CAD images
  GenericName=DraftSight
 -Exec="/opt/dassault-systemes/DraftSight/Linux/DraftSight"
-+Exec=draftsight %F
++Exec=LD_LIBRARY_PATH=/opt/dassault-systemes/DraftSight/Linux /opt/dassault-systemes/DraftSight/Linux/DraftSight %F
  Path=/opt/dassault-systemes/DraftSight/Linux
  Type=Application
  Terminal=false
