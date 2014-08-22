@@ -1,5 +1,6 @@
 #!/usr/bin/sh
 #A wrapper script for the workaround a bug with non-latin characters contained in the CAD file name and path.
+#dsver V1R5.1
 if [[ -f ${1} ]];then
 #   echo "argu = ${1}" 
    ARG="$(dirname "${1}" | sed -e 's/ /\\\ /g')"
