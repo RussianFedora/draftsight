@@ -5,13 +5,12 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
 Version:	2014.5.60
-Release:	2.1%{?dist}
+Release:	2.2%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
 Source0:	http://dl-ak.solidworks.com/nonsecure/draftsight/%{dsver}/draftSight.rpm
 Source1:	001-fix-mime-types.patch
-Source2:	draftsight
 
 BuildRequires:	desktop-file-utils
 
@@ -127,10 +126,11 @@ rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
 # Fix *.desktop file and mime-types:
 patch -p1 < %{SOURCE1}
 
-# Install a wrapper script for the workaround a bug with non-latin characters contained in the CAD file name and path: 
+# Create a symlink at %{buildroot}%{_bindir}: 
 mkdir -p %{buildroot}%{_bindir}
-install -m 755 %{SOURCE2} %{buildroot}%{_bindir}/%{name}
-chmod +x %{buildroot}%{_bindir}/%{name}
+pushd %{buildroot}%{_bindir}
+  ln -s ../../opt/dassault-systemes/DraftSight/Linux/DraftSight draftsight
+popd
 
 # Move *.desktop file to %{_datadir}:
 mkdir -p %{buildroot}%{_datadir}/applications
@@ -258,6 +258,10 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_localstatedir}/opt/dassault-systemes
 
 %changelog
+* Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.2.R
+- hot fix: DraftSight doesn't open files with spaces in names
+- remove wrapper script %{SOURCE0}
+
 * Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.1.R
 - update to V1R5.2
 - replace old wrapper script with new one (pushd into DraftSight working directory \

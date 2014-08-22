@@ -1,4 +1,0 @@
-#!/usr/bin/sh
-#A wrapper script for the workaround a bug with fail on loading modules.
-#dsver V1R5.2
-LD_LIBRARY_PATH=/opt/dassault-systemes/DraftSight/Linux /opt/dassault-systemes/DraftSight/Linux/DraftSight ${1}
