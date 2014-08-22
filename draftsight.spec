@@ -1,11 +1,11 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver V1R5.1
+%define dsver V1R5.2
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
-Version:	2014.3.70
-Release:	2.2%{?dist}
+Version:	2014.5.60
+Release:	2.1%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
@@ -258,6 +258,12 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_localstatedir}/opt/dassault-systemes
 
 %changelog
+* Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.1.R
+- update to V1R5.2
+- replace old wrapper script with new one (pushd into DraftSight working directory \
+  is required now); see https://swym.3ds.com/#post:31853 \
+  767690 The file name saved with Russian characters shows error when opening it
+
 * Tue Aug 12 2014 Vasiliy N. Glazov <vascom2@gmail.com> - 2014.3.70-2.2.R
 - remove some unnecessary Provides
 

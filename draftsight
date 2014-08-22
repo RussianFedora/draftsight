@@ -1,25 +1,4 @@
 #!/usr/bin/sh
-#A wrapper script for the workaround a bug with non-latin characters contained in the CAD file name and path.
-#dsver V1R5.1
-if [[ -f ${1} ]];then
-#   echo "argu = ${1}" 
-   ARG="$(dirname "${1}" | sed -e 's/ /\\\ /g')"
-#   echo "ARG = ${ARG}"
-   eval cd "$(echo "${ARG}")"
-   FULLFILEPATH="$(pwd)/$(basename "${1}")"
-#   echo "FULLFILEPATH = ${FULLFILEPATH}"
-   FILEHASH=$(md5sum "${FULLFILEPATH}" | cut -f1 -d" " | cut -c1-8)
-#   echo ${FILEHASH}
-   mkdir -p /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
-   ln -s "${FULLFILEPATH}" /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/${FILEHASH}.${1##*.}
-   pushd /tmp/DraftSight_$(whoami)_temp/${FILEHASH} &> /dev/null
-   /opt/dassault-systemes/DraftSight/Linux/DraftSight ${FILEHASH}.${FULLFILEPATH##*.}
-   popd &> /dev/null
-   if [ /tmp/DraftSight_$(whoami)_temp/${FILEHASH}/ ]; then
-      rm -rf /tmp/DraftSight_$(whoami)_temp/${FILEHASH}
-   fi
-   else
-   /opt/dassault-systemes/DraftSight/Linux/DraftSight "$(echo ${1} | sed -e 's/ /\\\ /g')"
-fi
-
-exit 0
+#A wrapper script for the workaround a bug with fail on loading modules.
+#dsver V1R5.2
+LD_LIBRARY_PATH=/opt/dassault-systemes/DraftSight/Linux /opt/dassault-systemes/DraftSight/Linux/DraftSight ${1}
