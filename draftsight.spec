@@ -5,7 +5,7 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
 Version:	2014.5.60
-Release:	2.2%{?dist}
+Release:	2.3%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
@@ -258,6 +258,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_localstatedir}/opt/dassault-systemes
 
 %changelog
+* Sat Aug 23 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.R
+- bump version
+
 * Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.2.R
 - hot fix: DraftSight doesn't open files with spaces in names
 - remove wrapper script %{SOURCE0}
