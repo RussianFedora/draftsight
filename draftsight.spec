@@ -5,7 +5,7 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
 Version:	2014.5.60
-Release:	2.3%{?dist}
+Release:	2.3.1%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
@@ -255,6 +255,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Sun Aug 24 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.1.R
+- bump version for RFR20
+
 * Sun Aug 24 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.R
 - ft-rockey.rules (udev rule) is created at <install> section now, \
   not at <post> section
