@@ -5,12 +5,13 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
 Version:	2014.5.60
-Release:	2.2%{?dist}
+Release:	2.3%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
 Source0:	http://dl-ak.solidworks.com/nonsecure/draftsight/%{dsver}/draftSight.rpm
 Source1:	001-fix-mime-types.patch
+Source2:	ft-rockey.rules
 
 BuildRequires:	desktop-file-utils
 
@@ -171,12 +172,13 @@ pushd %{buildroot}/opt/dassault-systemes/DraftSight/Fonts
 ln -s LTypeShp.shx genltshp.shx
 popd
 
-%post
-# Prepare for dongle:
-if [ /etc/udev/rules.d/ ]; then
-  echo "BUS==\"usb\", SYSFS{idVendor}==\"096e\", MODE==\"0666\"" > /etc/udev/rules.d/ft-rockey.rules
+# Install udev rule (prepare for dongle):
+if [ %{_sysconfdir}/udev/rules.d/ ]; then
+mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
+install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/udev/rules.d/ft-rockey.rules
 fi
 
+%post
 if [ -x /usr/bin/touch ]; then
 touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
 touch --no-create %{_datadir}/icons/gnome &> /dev/null || :
@@ -196,12 +198,6 @@ fi
 
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   /usr/bin/gtk-update-icon-cache --quiet %{_datadir}/icons/gnome &> /dev/null || :
-fi
-
-%preun
-# Remove dongle preparing:
-if [ /etc/udev/rules.d/ft-rockey.rules ]; then
-rm /etc/udev/rules.d/ft-rockey.rules
 fi
 
 %postun
@@ -256,11 +252,17 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/pixmaps/dassault-systemes.%{name}.png
 %{_datadir}/mime/packages/*.xml
 %{_localstatedir}/opt/dassault-systemes
+%config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Sun Aug 24 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.R
+- ft-rockey.rules (udev rule) is created at <install> section now, \
+  not at <post> section
+- remove <preun> section
+
 * Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.2.R
 - hot fix: DraftSight doesn't open files with spaces in names
-- remove wrapper script %{SOURCE0}
+- remove wrapper script <SOURCE0>
 
 * Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.1.R
 - update to V1R5.2
@@ -269,7 +271,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
   767690 The file name saved with Russian characters shows error when opening it
 
 * Tue Aug 12 2014 Vasiliy N. Glazov <vascom2@gmail.com> - 2014.3.70-2.2.R
-- remove some unnecessary Provides
+- remove some unnecessary <Provides>
 
 * Sun Jul 06 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.1.R
 - add a wrapper script for the workaround a bug with non-latin characters
@@ -277,7 +279,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 * Sat Jul 05 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
 - fix missing mime-types
 - fix missing genltshp.shx
-- fix %preun
+- fix <preun>
 
 * Fri Jul 04 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
 #- fix missing mime-types #2 (POOR ATTEMPT!)
@@ -290,11 +292,11 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 - clean up spec file
 
 * Mon Jun 30 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.R.3
-- remove some useless "Provides" strings
+- remove some useless <Provides> strings
 - clean up spec file
 
 * Sun Jun 29 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.3.70-2.R.2
-- remove the most "Requires" strings
+- remove the most <Requires> strings
 - add dependence on libaudio.so.2
 - clean up spec file
 
