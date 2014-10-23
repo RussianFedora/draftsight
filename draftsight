@@ -1,2 +1,2 @@
 #! /bin/sh
-LD_LIBRARY_PATH=/opt/dassault-systemes/DraftSight/Linux /opt/dassault-systemes/DraftSight/Linux/DraftSight $1
+eval LD_LIBRARY_PATH=/opt/dassault-systemes/DraftSight/Linux /opt/dassault-systemes/DraftSight/Linux/DraftSight $(echo $1 | sed -e 's/ /\\\ /g')
