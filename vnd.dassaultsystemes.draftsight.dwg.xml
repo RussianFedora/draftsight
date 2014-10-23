@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/vnd.dassaultsystemes.draftsight.dwg">
+    <sub-class-of type="image/vnd.dwg"/>
+    <icon name="application-vnd.dassaultsystemes.draftsight.dwg"/>
+    <comment>CAD Drawing</comment>
+    <magic priority="59">
+      <match type="string" offset="0" value="AC10"/>
+    </magic>
+    <glob pattern="*.dwg"/>
+  </mime-type>
+</mime-info>

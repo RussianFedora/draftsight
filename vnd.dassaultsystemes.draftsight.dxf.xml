@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/vnd.dassaultsystemes.draftsight.dxf">
+    <sub-class-of type="image/vnd.dxf"/>
+    <icon name="application-vnd.dassaultsystemes.draftsight.dxf"/>
+    <comment>CAD Drawing</comment>
+    <magic priority="59">
+      <match type="string" offset="0" value="AutoCAD Binary DXF"/>
+      <match type="string" offset="0" value=" "/>
+      <match type="string" offset="0" value="1"/>
+      <match type="string" offset="0" value="2"/>
+      <match type="string" offset="0" value="3"/>
+      <match type="string" offset="0" value="4"/>
+      <match type="string" offset="0" value="5"/>
+      <match type="string" offset="0" value="6"/>
+      <match type="string" offset="0" value="7"/>
+      <match type="string" offset="0" value="8"/>
+      <match type="string" offset="0" value="9"/>
+      <match type="string" offset="0" value="0"/>
+    </magic>
+    <glob pattern="*.dxf"/>
+  </mime-type>
+</mime-info>

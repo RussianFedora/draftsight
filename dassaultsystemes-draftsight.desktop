@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=DraftSight
+Comment=Editing CAD images
+GenericName=DraftSight
+Exec=draftsight %F
+Type=Application
+Terminal=false
+Icon=dassaultsystemes-draftsight
+MimeType=image/vnd.dwg;image/vnd.dwt;image/vnd.dxf;application/vnd.dassaultsystemes.draftsight.dwg;application/vnd.dassaultsystemes.draftsight.dwt;application/vnd.dassaultsystemes.draftsight.dxf;
+Categories=Application;Graphics;
