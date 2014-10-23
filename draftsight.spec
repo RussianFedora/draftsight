@@ -1,6 +1,7 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
 %define dsver V1R6.0
+%define developer dassaultsystemes
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
@@ -8,10 +9,14 @@ Version:	2014.7.495
 Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
-URL:		http://www.3ds.com/products-services/draftsight/download-draftsight
-Source0:	http://dl-ak.solidworks.com/nonsecure/draftsight/%{dsver}/draftSight.rpm
-Source1:	001-fix-mime-types.patch
-Source2:	ft-rockey.rules
+URL:		http://www.3ds.com/products-services/%{name}/download-%{name}
+Source0:	http://dl-ak.solidworks.com/nonsecure/%{name}/%{dsver}/draftSight.rpm
+Source1:	%{name}
+Source2:	%{developer}-%{name}.desktop
+Source3:	vnd.%{developer}.%{name}.dwg.xml
+Source4:	vnd.%{developer}.%{name}.dwt.xml
+Source5:	vnd.%{developer}.%{name}.dxf.xml
+Source6:	ft-rockey.rules
 
 BuildRequires:	desktop-file-utils
 
@@ -133,51 +138,6 @@ mkdir -p %{buildroot}
 
 pushd %{buildroot}
 rpm2cpio %{SOURCE0} | cpio -idV --quiet
-
-# Remove broken link:
-rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
-
-# Fix *.desktop file and mime-types:
-patch -p1 < %{SOURCE1}
-
-# Create a symlink at %{buildroot}%{_bindir}: 
-mkdir -p %{buildroot}%{_bindir}
-pushd %{buildroot}%{_bindir}
-  ln -s ../../opt/dassault-systemes/DraftSight/Linux/DraftSight draftsight
-popd
-
-# Move *.desktop file to %{_datadir}:
-mkdir -p %{buildroot}%{_datadir}/applications
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_%{name}.desktop %{buildroot}%{_datadir}/applications/dassault-systemes_%{name}.desktop
-
-# Install mime-types:
-mkdir -p %{buildroot}%{_datadir}/mime/packages
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_%{name}-dwg.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_%{name}-dwg.xml
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_%{name}-dwt.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_%{name}-dwt.xml
-mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/dassault-systemes_%{name}-dxf.xml %{buildroot}%{_datadir}/mime/packages/dassault-systemes_%{name}-dxf.xml
-popd
-
-# Install pixmaps:
-for SIZE in 16 32 48 64 128; do
-  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps
-  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes
-  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps
-  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps/dassault-systemes.%{name}.png
-  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps/dassault-systemes.%{name}.png
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dwg.png
-  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dwg.png
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dxf.png
-  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dxf.png
-  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dwt.png
-  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.dassault-systemes.%{name}-dwt.png
-done
-mkdir -p %{buildroot}%{_datadir}/pixmaps
-cp %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/dassault-systemes.%{name}.png %{buildroot}%{_datadir}/pixmaps/dassault-systemes.%{name}.png
-
-# Remove unused resources:
-pushd %{buildroot}
-rm -rf %{buildroot}/opt/dassault-systemes/DraftSight/Resources
 popd
 
 # Fix missing genltshp.shx:
@@ -185,10 +145,48 @@ pushd %{buildroot}/opt/dassault-systemes/DraftSight/Fonts
 ln -s LTypeShp.shx genltshp.shx
 popd
 
+# Remove broken link:
+rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
+
+# Install launch script: 
+mkdir -p %{buildroot}%{_bindir}
+install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
+
+# Install *.desktop file and mime-types: 
+mkdir -p %{buildroot}%{_datadir}/applications
+mkdir -p %{buildroot}%{_datadir}/mime/packages
+install -pm 644 %{SOURCE2} %{buildroot}%{_datadir}/applications/%{developer}-%{name}.desktop
+install -pm 644 %{SOURCE3} %{buildroot}%{_datadir}/mime/packages/vnd.%{developer}.%{name}.dwg.xml
+install -pm 644 %{SOURCE4} %{buildroot}%{_datadir}/mime/packages/vnd.%{developer}.%{name}.dwt.xml
+install -pm 644 %{SOURCE5} %{buildroot}%{_datadir}/mime/packages/vnd.%{developer}.%{name}.dxf.xml
+
+# Install pixmaps:
+for SIZE in 16 32 48 64 128; do
+  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps
+  mkdir -p %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes
+  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps
+  mkdir -p %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/apps/%{developer}-%{name}.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/program.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/apps/%{developer}-%{name}.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dwg.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwg.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dwg.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dxf.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dxf.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dxf.png
+  cp %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/hicolor/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dwt.png
+  mv %{buildroot}/opt/dassault-systemes/DraftSight/Resources/pixmaps/${SIZE}x${SIZE}/file-dwt.png %{buildroot}%{_datadir}/icons/gnome/${SIZE}x${SIZE}/mimetypes/application-vnd.%{developer}.%{name}.dwt.png
+done
+mkdir -p %{buildroot}%{_datadir}/pixmaps
+cp %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/%{developer}-%{name}.png %{buildroot}%{_datadir}/pixmaps/%{developer}-%{name}.png
+
+# Remove unused resources:
+pushd %{buildroot}
+rm -rf %{buildroot}/opt/dassault-systemes/DraftSight/Resources
+popd
+
 # Install udev rule (prepare for dongle):
 if [ %{_sysconfdir}/udev/rules.d/ ]; then
 mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
-install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/udev/rules.d/ft-rockey.rules
+install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d/ft-rockey.rules
 fi
 
 %post
@@ -241,7 +239,8 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files
 /opt/dassault-systemes
 %{_bindir}/%{name}
-%{_datadir}/applications/*.desktop
+%{_datadir}/Dassault\ Systemes
+%{_datadir}/applications/%{developer}-%{name}.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/16x16/mimetypes/*.png
 %{_datadir}/icons/gnome/16x16/apps/*.png
@@ -262,21 +261,24 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %{_datadir}/icons/hicolor/128x128/mimetypes/*.png
 %{_datadir}/icons/gnome/128x128/apps/*.png
 %{_datadir}/icons/gnome/128x128/mimetypes/*.png
-%{_datadir}/pixmaps/dassault-systemes.%{name}.png
+%{_datadir}/pixmaps/%{developer}-%{name}.png
 %{_datadir}/mime/packages/*.xml
 %{_localstatedir}/opt/dassault-systemes
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
-* Mon Oct 20 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.7.495-1.1.R
+* Thu Oct 23 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.7.495-1.1.R
+- fix mime-types and *.desktop file
+- create launch script
+
+* Mon Oct 20 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru>
 - update to V1R6.0: migrated to Qt5; DraftSight for GNU/Linux is x86_64 only now!
 
 * Sun Aug 24 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.1.R
 - bump version for RFR20
 
 * Sun Aug 24 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.3.R
-- ft-rockey.rules (udev rule) is created at <install> section now,
-  not at <post> section
+- ft-rockey.rules (udev rule) is created at <install> section now, not at <post> section
 - remove <preun> section
 
 * Fri Aug 22 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.5.60-2.2.R
