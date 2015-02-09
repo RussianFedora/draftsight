@@ -2,6 +2,8 @@
 %define debug_package %{nil}
 %define dsver V1R6.1
 %define developer dassaultsystemes
+%global fix_rpath_error_0004 1
+%global fix_rpath_error_0010 1
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
@@ -19,6 +21,10 @@ Source5:	vnd.%{developer}.%{name}.dxf.xml
 Source6:	ft-rockey.rules
 
 BuildRequires:	desktop-file-utils
+
+%if 0%{?fix_rpath_error_0004} || 0%{?fix_rpath_error_0010}
+BuildRequires:	chrpath
+%endif
 
 Requires:	libaudio.so.2
 Requires:	libGLU.so.1
@@ -148,8 +154,9 @@ pushd %{buildroot}/opt/dassault-systemes/DraftSight/Fonts
 ln -s LTypeShp.shx genltshp.shx
 popd
 
-# Remove broken link:
+# Remove broken links:
 rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
+#rm %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libRecentDocumentBrowser.*
 
 # Install launch script: 
 mkdir -p %{buildroot}%{_bindir}
@@ -192,8 +199,58 @@ mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
 install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d/ft-rockey.rules
 fi
 
-#Workaround the rpath errors:
-export QA_RPATHS=$[ 0x0004|0x0010 ]
+# Fix RPATH error 0004:
+%if 0%{?fix_rpath_error_0004}
+    pushd %{buildroot}/opt/dassault-systemes/DraftSight/Libraries
+        for INSECURE_RPATH_FILES_00 in \
+            libK2CrashReportSendService.so.1.0.0 \
+            libK2TaskPane.so.1.0.0 \
+            libK2AVCommand.so.1.0.0 \
+            libExtCommands.so.1; do
+                chrpath --delete ./${INSECURE_RPATH_FILES_00}
+        done
+    popd
+        
+    pushd %{buildroot}/opt/dassault-systemes/DraftSight/Linux
+        for INSECURE_RPATH_FILES_01 in \
+            RecentDocumentBrowser.tx; do
+                chrpath --delete ./${INSECURE_RPATH_FILES_01}
+        done
+    popd
+%endif
+
+# Fix RPATH error 0010:
+%if 0%{?fix_rpath_error_0010}
+    pushd %{buildroot}/opt/dassault-systemes/DraftSight/Libraries
+        for EMPTY_RPATH_FILES_00 in \
+            libltbar.so.18.0  \
+            lfjbg.so.18.0 \
+            lfjls.so.18.0 \
+            libltdic.so.18.0 \
+            lfcmp.so.18.0 \
+            libltimgutl.so.18.0 \
+            lfjxr.so.18.0 \
+            lfj2k.so.18.0 \
+            lffax.so.18.0 \
+            libltfil.so.18.0 \
+            libltimgefx.so.18.0 \
+            lfbmp.so.18.0 \
+            libltimgclr.so.18.0 \
+            libltkrn.so.18.0 \
+            lfpng.so.18.0 \
+            lfgif.so.18.0 \
+            libltimgcor.so.18.0 \
+            libltdis.so.18.0 \
+            lfpsd.so.18.0 \
+            lfjb2.so.18.0 \
+            lftif.so.18.0; do
+                chrpath --delete ./${EMPTY_RPATH_FILES_00}
+        done
+    popd
+%endif
+
+# Workaround the RPATH errors:
+# export QA_RPATHS=$[ 0x0004|0x0010 ]
 
 %post
 if [ -x /usr/bin/touch ]; then
