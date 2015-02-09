@@ -1,11 +1,11 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver V1R6.0
+%define dsver V1R6.1
 %define developer dassaultsystemes
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
-Version:	2014.7.495
+Version:	2015.1.0.60
 Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
@@ -104,12 +104,15 @@ Provides:   libTD_Root.so()(64bit)
 #Provides:   libTG_ModelerGeometry.so.1
 #Provides:   libW3dTk.so.1
 #Provides:   libWhipTk.so.1
-Provides:   libdsApi_LIB.so.1()(64bit)
-Provides:   libdsInterface.so.1()(64bit)
-Provides:   libdsJServerAddin.so.1()(64bit)
+Provides:   libdsApi.so.1()(64bit)
+#Provides:   libdsApi_LIB.so.1()(64bit)
+#Provides:   libdsInterface.so.1()(64bit)
+#Provides:   libdsJServerAddin.so.1()(64bit)
 Provides:   libdsLibrary.so.1()(64bit)
 #Provides:   libfxsisl.so.1
 Provides:   libicudata.so.48()(64bit)
+Provides:   libicui18n.so.48()(64bit)
+Provides:   libicuuc.so.48()(64bit)
 Provides:   libltbar.so.18()(64bit)
 Provides:   libltimgclr.so.18()(64bit)
 Provides:   libltimgcor.so.18()(64bit)
@@ -189,6 +192,9 @@ mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
 install -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/udev/rules.d/ft-rockey.rules
 fi
 
+#Workaround the rpath errors:
+export QA_RPATHS=$[ 0x0004|0x0010 ]
+
 %post
 if [ -x /usr/bin/touch ]; then
 touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
@@ -239,7 +245,7 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %files
 /opt/dassault-systemes
 %{_bindir}/%{name}
-%{_datadir}/Dassault\ Systemes
+%{_datadir}/Dassault*
 %{_datadir}/applications/%{developer}-%{name}.desktop
 %{_datadir}/icons/hicolor/16x16/apps/*.png
 %{_datadir}/icons/hicolor/16x16/mimetypes/*.png
@@ -267,6 +273,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Mon Feb 09 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.1.0.60-1.1.R
+- update to V1R6.1
+
 * Thu Oct 23 2014 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2014.7.495-1.1.R
 - fix mime-types and *.desktop file
 - create launch script
