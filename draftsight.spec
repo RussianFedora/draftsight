@@ -1,13 +1,13 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver V1R6.1
+%define dsver V1R6.2
 %define developer dassaultsystemes
-%global fix_rpath_error_0004 1
-%global fix_rpath_error_0010 1
+%global fix_rpath_error_0004 0
+%global fix_rpath_error_0010 0
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
-Version:	2015.1.0.60
+Version:	2015.2.0.2052
 Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
@@ -31,103 +31,24 @@ Requires:	libGLU.so.1
 Requires:	xdg-utils
 Requires:	gnome-icon-theme
 
-#Provides:   lfbmp.so.18
-#Provides:   lfcmp.so.18
-#Provides:   lffax.so.18
-#Provides:   lfgif.so.18
-#Provides:   lfj2k.so.18
-#Provides:   lfjb2.so.18
-#Provides:   lfjbg.so.18
-#Provides:   lfjls.so.18
-#Provides:   lfjxr.so.18
-#Provides:   lfpng.so.18
-#Provides:   lfpsd.so.18
-#Provides:   lftif.so.18
-#Provides:   libAcDgnLS.so.1
-#Provides:   libAecArchBase.so.1
-#Provides:   libAecArchDACHBase.so.1
-#Provides:   libAecAreaCalculationBase.so.1
-#Provides:   libAecBase.so.1
-Provides:   libAecGeometry.so()(64bit)
-#Provides:   libAecSchedule.so.1
-#Provides:   libAecScheduleData.so.1
-#Provides:   libAecStructureBase.so.1
-Provides:   libDDKERNEL.so.1()(64bit)
-Provides:   libDGNImport.so.1()(64bit)
-Provides:   libDwfCore.so()(64bit)
-#Provides:   libDwfToolkit.so.1
-Provides:   libExtCommands.so.1()(64bit)
-Provides:   libFxCharMap.so.1()(64bit)
-Provides:   libFXCommands.so.1()(64bit)
-Provides:   libFXCommandsBase.so.1()(64bit)
-Provides:   libFXCrashRpt.so.1()(64bit)
-Provides:   libFXCurves.so.1()(64bit)
-Provides:   libFXDimCommands.so.1()(64bit)
-Provides:   libFXEvalWatcher.so.1()(64bit)
-Provides:   libFXExport.so.1()(64bit)
-Provides:   libFXGripPoints.so.1()(64bit)
-Provides:   libFXLISP.so.1()(64bit)
-Provides:   libFXProperties.so.1()(64bit)
-Provides:   libFXRenderBase.so.1()(64bit)
-#Provides:   libFxCharMap.so.1
-Provides:   libFxDesignResources.so.1()(64bit)
-Provides:   libFxFileDialogs.so.1()(64bit)
-Provides:   libFxImages.so.1()(64bit)
-#Provides:   libFxQtImagePlugin.so.1
-Provides:   libFxStandards.so.1()(64bit)
-Provides:   libGestureWidget.so.1()(64bit)
-#Provides:   libModelerGeometry.so.1
-Provides:   libOdQtOpenGL.so.1()(64bit)
-#Provides:   libPSToolkit.so.1
-#Provides:   libPlotStyleServices.so.1
-#Provides:   libRasterProcessor.so.1
-#Provides:   libRecomputeDimBlock.so.1
-Provides:   libRxRasterServices.so.1()(64bit)
-#Provides:   libTD_AcisBuilder.so.1
-Provides:   libTD_Alloc.so()(64bit)
-#Provides:   libTD_Ave.so.1
-#Provides:   libTD_Br.so.1
-#Provides:   libTD_BrepRenderer.so.1
-Provides:   libTD_Db.so()(64bit)
-Provides:   libTD_DbRoot.so()(64bit)
-#Provides:   libTD_DgnImport.so.1
-#Provides:   libTD_DgnUnderlay.so.1
-#Provides:   libTD_Dwf7Export.so.1
-#Provides:   libTD_Dwf7Import.so.1
-#Provides:   libTD_DynBlocks.so.1
-#Provides:   libTD_FtFontEngine.so.1
-Provides:   libTD_Ge.so()(64bit)
-Provides:   libTD_Gi.so()(64bit)
-Provides:   libTD_Gs.so()(64bit)
-#Provides:   libTD_PDFToolkit.so.1
-#Provides:   libTD_PdfExport.so.1
-Provides:   libTD_Root.so()(64bit)
-#Provides:   libTD_STLExport.so.1
-#Provides:   libTD_SpatialIndex.so.1
-#Provides:   libTD_SvgExport.so.1
-#Provides:   libTG_Db.so.1
-#Provides:   libTG_Dgn7IO.so.1
-#Provides:   libTG_ModelerGeometry.so.1
-#Provides:   libW3dTk.so.1
-#Provides:   libWhipTk.so.1
-Provides:   libdsApi.so.1()(64bit)
-#Provides:   libdsApi_LIB.so.1()(64bit)
-#Provides:   libdsInterface.so.1()(64bit)
-#Provides:   libdsJServerAddin.so.1()(64bit)
-Provides:   libdsLibrary.so.1()(64bit)
-#Provides:   libfxsisl.so.1
-Provides:   libicudata.so.48()(64bit)
-Provides:   libicui18n.so.48()(64bit)
-Provides:   libicuuc.so.48()(64bit)
-Provides:   libltbar.so.18()(64bit)
-Provides:   libltimgclr.so.18()(64bit)
-Provides:   libltimgcor.so.18()(64bit)
-Provides:   libltimgefx.so.18()(64bit)
-Provides:   libltimgutl.so.18()(64bit)
-Provides:   libltdic.so.18()(64bit)
-Provides:   libltdis.so.18()(64bit)
-Provides:   libltfil.so.18()(64bit)
-Provides:   libltkrn.so.18()(64bit)
+Obsoletes:	draftsight.i686 < 2015
+
+Provides:	libAecGeometry.so()(64bit)
+Provides:	libTD_Gs.so()(64bit)
+Provides:	libFXExport.so.1()(64bit)
+Provides:	libTD_DbRoot.so()(64bit)
+Provides:	libTD_Db.so()(64bit)
+Provides:	libFXCommandsBase.so.1()(64bit)
+Provides:	libDwfCore.so()(64bit)
+Provides:	libFxImages.so.1()(64bit)
+Provides:	libFXRenderBase.so.1()(64bit)
+Provides:	libDDKERNEL.so.1()(64bit)
+Provides:	libFXCrashRpt.so.1()(64bit)
+Provides:	libTD_Root.so()(64bit)
+Provides:	libTD_Ge.so()(64bit)
+Provides:	libFxFileDialogs.so.1()(64bit)
+Provides:	libTD_Alloc.so()(64bit)
+Provides:	libTD_Gi.so()(64bit)
 
 ExclusiveArch:	x86_64
 
@@ -330,6 +251,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Tue Apr 07 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.2.0.2052-1.1.R
+- update to V1R6.2
+
 * Mon Feb 09 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.1.0.60-1.1.R
 - update to V1R6.1
 
