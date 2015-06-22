@@ -1,13 +1,13 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver V1R6.2
+%define dsver V1R6.3
 %define developer dassaultsystemes
 %global fix_rpath_error_0004 0
 %global fix_rpath_error_0010 0
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
-Version:	2015.2.0.2052
+Version:	2015.3.0.3019
 Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
@@ -26,29 +26,55 @@ BuildRequires:	desktop-file-utils
 BuildRequires:	chrpath
 %endif
 
-Requires:	libaudio.so.2
-Requires:	libGLU.so.1
+Requires:	libaudio.so.2()(64bit)
+Requires:	libGLU.so.1()(64bit)
 Requires:	xdg-utils
 Requires:	gnome-icon-theme
 
 Obsoletes:	draftsight.i686 < 2015
 
 Provides:	libAecGeometry.so()(64bit)
-Provides:	libTD_Gs.so()(64bit)
-Provides:	libFXExport.so.1()(64bit)
-Provides:	libTD_DbRoot.so()(64bit)
-Provides:	libTD_Db.so()(64bit)
-Provides:	libFXCommandsBase.so.1()(64bit)
-Provides:	libDwfCore.so()(64bit)
-Provides:	libFxImages.so.1()(64bit)
-Provides:	libFXRenderBase.so.1()(64bit)
 Provides:	libDDKERNEL.so.1()(64bit)
+Provides:	libDGNImport.so.1()(64bit)
+Provides:	libDwfCore.so()(64bit)
+Provides:	libExtCommands.so.1()(64bit)
+Provides:	libFXCommands.so.1()(64bit)
+Provides:	libFXCommandsBase.so.1()(64bit)
 Provides:	libFXCrashRpt.so.1()(64bit)
-Provides:	libTD_Root.so()(64bit)
-Provides:	libTD_Ge.so()(64bit)
+Provides:	libFXCurves.so.1()(64bit)
+Provides:	libFXDimCommands.so.1()(64bit)
+Provides:	libFXEvalWatcher.so.1()(64bit)
+Provides:	libFXExport.so.1()(64bit)
+Provides:	libFXGripPoints.so.1()(64bit)
+Provides:	libFXProperties.so.1()(64bit)
+Provides:	libFXRenderBase.so.1()(64bit)
+Provides:	libFxCharMap.so.1()(64bit)
+Provides:	libFxDesignResources.so.1()(64bit)
 Provides:	libFxFileDialogs.so.1()(64bit)
+Provides:	libFxImages.so.1()(64bit)
+Provides:	libFxStandards.so.1()(64bit)
+Provides:	libGestureWidget.so.1()(64bit)
+Provides:	libOdQtOpenGL.so.1()(64bit)
+Provides:	libQt5CLucene.so.5()(64bit)
+Provides:	libQt5Help.so.5()(64bit)
+Provides:	libRxRasterServices.so.1()(64bit)
 Provides:	libTD_Alloc.so()(64bit)
+Provides:	libTD_Db.so()(64bit)
+Provides:	libTD_DbRoot.so()(64bit)
+Provides:	libTD_Ge.so()(64bit)
 Provides:	libTD_Gi.so()(64bit)
+Provides:	libTD_Gs.so()(64bit)
+Provides:	libTD_Root.so()(64bit)
+Provides:	libicudata.so.48()(64bit)
+Provides:	libltbar.so.18()(64bit)
+Provides:	libltdic.so.18()(64bit)
+Provides:	libltdis.so.18()(64bit)
+Provides:	libltfil.so.18()(64bit)
+Provides:	libltimgclr.so.18()(64bit)
+Provides:	libltimgcor.so.18()(64bit)
+Provides:	libltimgefx.so.18()(64bit)
+Provides:	libltimgutl.so.18()(64bit)
+Provides:	libltkrn.so.18()(64bit)
 
 ExclusiveArch:	x86_64
 
@@ -77,7 +103,8 @@ popd
 
 # Remove broken links:
 rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/K2GestureWidget.tx
-#rm %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libRecentDocumentBrowser.*
+rm %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsApi.tx
+rm %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libRecentDocumentBrowser.*
 
 # Install launch script: 
 mkdir -p %{buildroot}%{_bindir}
@@ -251,6 +278,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Tue Jun 23 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.3.0.3019-1.1.R
+- update to V1R6.3
+
 * Tue Apr 07 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.2.0.2052-1.1.R
 - update to V1R6.2
 
