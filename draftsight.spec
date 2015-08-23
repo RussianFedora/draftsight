@@ -1,13 +1,13 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver V1R6.3
+%define dsver V1R6.3-1
 %define developer dassaultsystemes
 %global fix_rpath_error_0004 0
 %global fix_rpath_error_0010 0
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Name:		draftsight
-Version:	2015.3.0.3019
+Version:	2015.3.0.3020
 Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
@@ -278,6 +278,9 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 %config %{_sysconfdir}/udev/rules.d/ft-rockey.rules
 
 %changelog
+* Sun Aug 23 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.3.0.3020-1.1.R
+- update to V1R6.3-1
+
 * Tue Jun 23 2015 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2015.3.0.3019-1.1.R
 - update to V1R6.3
 
