@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 carasin berlogue <carasin.berlogue@mail.ru> -->
+<component type="desktop">
+  <id>dassaultsystemes-draftsight.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>Proprietary</project_license>
+  <name>DraftSight</name>
+  <summary>Professional CAD system: supported file formats are DWT, DXF and DWG</summary>
+  <summary xml:lang="ru">Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG</summary>
+
+  <description>
+    <p>
+      Free CAD software for your DWG files by Dassault Systèmes (standalone license).
+      DraftSight lets professional CAD users, students and educators create, edit and
+      view DWG files. DraftSight runs on Windows®, Mac® and Linux.
+    </p>
+    <p xml:lang="ru">
+      Бесплатная САПР с поддержкой формата DWG от Dassault Systèmes (индивидуальная
+      лицензия). DraftSight позволяет профессиональным пользователям, студентам и
+      преподавателям создавать, редактировать и просматривать файлы DWG. DraftSight
+      работает на платформах Windows®, Mac® and Linux.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">https://raw.githubusercontent.com/RussianFedora/draftsight/master/screenshots/draftsight_screenshot_00.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/RussianFedora/draftsight/master/screenshots/draftsight_screenshot_01.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/RussianFedora/draftsight/master/screenshots/draftsight_screenshot_02.png</screenshot>
+    <screenshot>https://raw.githubusercontent.com/RussianFedora/draftsight/master/screenshots/draftsight_screenshot_03.png</screenshot>
+  </screenshots>
+
+  <url type="homepage">http://www.3ds.com/products-services/draftsight-cad-software/</url>
+  <developer_name>Dassault Systèmes</developer_name>
+  <updatecontact>carasin.berlogue_at_mail.ru</updatecontact>
+
+</component>
