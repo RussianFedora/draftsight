@@ -8,7 +8,7 @@ Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Summary(ru): 	Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG
 Name:		draftsight
 Version:	2016.1.0.2021
-Release:	1.2%{?dist}
+Release:	1.3%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/%{name}-cad-software/
@@ -32,7 +32,6 @@ BuildRequires:	chrpath
 BuildRequires:  libappstream-glib
 %endif
 
-Requires:	config(draftsight) = 2016.1.0.2021-1.1.fc23.R
 Requires:	/bin/bash
 Requires:	gnome-icon-theme
 Requires:	libGLU.so.1()(64bit)
@@ -326,6 +325,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Feb 28 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.1.0.2021-1.3.R
+- remove Requires: config(draftsight)
+
 * Sun Feb 28 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.1.0.2021-1.2.R
 - add BR: libappstream-glib
 
