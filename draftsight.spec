@@ -8,7 +8,7 @@ Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Summary(ru): 	Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG
 Name:		draftsight
 Version:	2016.1.0.2021
-Release:	1.1%{?dist}
+Release:	1.2%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/%{name}-cad-software/
@@ -27,6 +27,9 @@ AutoReq:	no
 BuildRequires:	desktop-file-utils
 %if 0%{?fix_rpath_errors}
 BuildRequires:	chrpath
+%endif
+%if 0%{?fedora} >= 20
+BuildRequires:  libappstream-glib
 %endif
 
 Requires:	config(draftsight) = 2016.1.0.2021-1.1.fc23.R
@@ -323,6 +326,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Feb 28 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.1.0.2021-1.2.R
+- add BR: libappstream-glib
+
 * Sat Feb 27 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.1.0.2021-1.1.R
 - update to 2016SP0
 - add *.appdata.xml for Fedora >=20
