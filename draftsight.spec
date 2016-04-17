@@ -1,14 +1,15 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver 2016SP0
+%define dsver 2016SP1
 %define developer dassaultsystemes
 %global fix_rpath_errors 1
+%global manual_deps 1
 
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Summary(ru): 	Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG
 Name:		draftsight
-Version:	2016.1.0.2021
-Release:	1.3%{?dist}
+Version:	2016.2.0.3034
+Release:	1.1%{?dist}
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/%{name}-cad-software/
@@ -22,8 +23,6 @@ Source5:	vnd.%{developer}.%{name}.dxf.xml
 Source6:	ft-rockey.rules
 Source7:	%{developer}-%{name}.appdata.xml
 
-AutoReq:	no
-
 BuildRequires:	desktop-file-utils
 %if 0%{?fix_rpath_errors}
 BuildRequires:	chrpath
@@ -31,6 +30,9 @@ BuildRequires:	chrpath
 %if 0%{?fedora} >= 20
 BuildRequires:  libappstream-glib
 %endif
+
+%if 0%{?manual_deps}
+AutoReq:	no
 
 Requires:	/bin/bash
 Requires:	gnome-icon-theme
@@ -63,6 +65,7 @@ Requires:	libuuid.so.1()(64bit)
 Requires:	libuuid.so.1(UUID_1.0)(64bit)
 Requires:	rtld(GNU_HASH)
 Requires:	xdg-utils
+%endif
 
 ExclusiveArch:	x86_64
 
@@ -102,7 +105,7 @@ rm $(find %{buildroot}/opt/dassault-systemes/DraftSight/ -type l -! -exec test -
 mkdir -p %{buildroot}%{_bindir}
 install -pm 755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 
-# Install *.desktop file and mime-types: 
+# Install *.desktop file and mime-types:
 mkdir -p %{buildroot}%{_datadir}/applications
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 install -pm 644 %{SOURCE2} %{buildroot}%{_datadir}/applications/%{developer}-%{name}.desktop
@@ -142,83 +145,61 @@ fi
 # Fix RPATH errors:
 %if 0%{?fix_rpath_errors}
     for BROKEN_RPATH_FILES in \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/RecentDocumentBrowser.tx \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiService \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiService \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiService \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiController \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiController \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiController \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltbar.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2CrashReportSendService.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjbg.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2TaskPane.so.1.0.0  \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjls.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltdic.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2AVCommand.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfcmp.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgutl.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjxr.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfj2k.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lffax.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltfil.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgefx.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfbmp.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libdsJServerAddin.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libdsJServerAddin.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libdsJServerAddin.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgclr.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltkrn.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfpng.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfgif.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libExtCommands.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgcor.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltdis.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfpsd.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjb2.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lftif.so.18.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Windows/_lib/release64/libWindows.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DockWidget/_lib/release64/libDockWidget.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockCustomData/_lib/release64/libBlockCustomData.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockLibraryManager/_lib/release64/libBlockLibraryManager.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockTrackerDemo/_lib/release64/libBlockTrackerDemo.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/Lisp/_lib/release64/libLispSample.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/PostEvent/_lib/release64/libPostEvent.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/PropertyWidgets/_lib/release64/libPropertyWidgets.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/ContextMenu/_lib/release64/libContextMenu.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DictionaryXDataDemo/_lib/release64/libDictionaryXDataDemo.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DockWidget/_lib/release64/libDockWidget.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DrawCircleCommand/_lib/release64/libDrawCircleCommand.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DrawTableCommand/_lib/release64/libDrawTableCommand.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DrawingToImage/_lib/release64/libDrawingToImage.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/EntityPreviewDemo/_lib/release64/libEntityPreviewDemo.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/ContextMenu/_lib/release64/libContextMenu.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DrawTableCommand/_lib/release64/libDrawTableCommand.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Menu/_lib/release64/libMenu.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/MyPrint/_lib/release64/libMyPrint.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/DrawCircleCommand/_lib/release64/libDrawCircleCommand.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Reactors/_lib/release64/libReactors.so.1.0.0 \
         %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Selection/_lib/release64/libSelection.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Menu/_lib/release64/libMenu.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockLibraryManager/_lib/release64/libBlockLibraryManager.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/Lisp/_lib/release64/libLispSample.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockCustomData/_lib/release64/libBlockCustomData.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/PropertyWidgets/_lib/release64/libPropertyWidgets.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/PostEvent/_lib/release64/libPostEvent.so.1.0.0 \
-        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Complex/BlockTrackerDemo/_lib/release64/libBlockTrackerDemo.so.1.0.0; do
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/Samples/C++/Simple/Windows/_lib/release64/libWindows.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsInterface.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/APISDK/lib/cpp/libdsLibrary.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfbmp.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfcmp.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lffax.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfgif.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfj2k.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjb2.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjbg.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjls.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfjxr.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfpng.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lfpsd.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/lftif.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libExtCommands.so.1 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2AVCommand.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2CrashReportSendService.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libK2TaskPane.so.1.0.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libdsJServerAddin.so.1 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltbar.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltdic.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltdis.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltfil.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgclr.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgcor.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgefx.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltimgutl.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Libraries/libltkrn.so.18.0 \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/RecentDocumentBrowser.tx \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiController \
+        %{buildroot}/opt/dassault-systemes/DraftSight/Linux/dsHttpApiService; do
             if [ ! -w ${BROKEN_RPATH_FILES} ]; then
                 chmod +w ${BROKEN_RPATH_FILES}
                 chrpath --delete ${BROKEN_RPATH_FILES}
@@ -325,6 +306,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Sun Apr 17 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.2.0.3034-1.1.R
+- update to 2016SP1
+
 * Sun Feb 28 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.1.0.2021-1.3.R
 - remove Requires: config(draftsight)
 
