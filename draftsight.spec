@@ -1,6 +1,6 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver 2016SP2
+%define dsver 2017SP0
 %define developer dassaultsystemes
 %global fix_rpath_errors 1
 %global manual_deps 1
@@ -8,8 +8,12 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Summary(ru): 	Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG
 Name:		draftsight
-Version:	2016.3.0.4050
+Version:	2017.0.0.1197
+%if 0%{?fedora} >= 25
+Release:	1.1%{?dist}.R
+%else
 Release:	1.1%{?dist}
+%endif
 
 License:	Standalone license, activation required
 URL:		http://www.3ds.com/products-services/%{name}-cad-software/
@@ -37,8 +41,12 @@ AutoReq:	no
 Requires:	/bin/bash
 Requires:	gnome-icon-theme
 Requires:	libGLU.so.1()(64bit)
-Requires:	libX11.so.6()(64bit)
 Requires:	libaudio.so.2()(64bit)
+Requires:	xdg-utils
+
+Requires:	ld-linux-x86-64.so.2()(64bit)
+Requires:	ld-linux-x86-64.so.2(GLIBC_2.3)(64bit)
+Requires:	libX11.so.6()(64bit)
 Requires:	libc.so.6()(64bit)
 Requires:	libc.so.6(GLIBC_2.14)(64bit)
 Requires:	libc.so.6(GLIBC_2.15)(64bit)
@@ -51,6 +59,8 @@ Requires:	libdl.so.2()(64bit)
 Requires:	libdl.so.2(GLIBC_2.2.5)(64bit)
 Requires:	libgcc_s.so.1()(64bit)
 Requires:	libgcc_s.so.1(GCC_3.0)(64bit)
+Requires:	libgcc_s.so.1(GCC_3.3)(64bit)
+Requires:	libgcc_s.so.1(GCC_4.2.0)(64bit)
 Requires:	libm.so.6()(64bit)
 Requires:	libm.so.6(GLIBC_2.2.5)(64bit)
 Requires:	libpthread.so.0()(64bit)
@@ -64,7 +74,6 @@ Requires:	libstdc++.so.6(GLIBCXX_3.4.9)(64bit)
 Requires:	libuuid.so.1()(64bit)
 Requires:	libuuid.so.1(UUID_1.0)(64bit)
 Requires:	rtld(GNU_HASH)
-Requires:	xdg-utils
 %endif
 
 ExclusiveArch:	x86_64
@@ -306,6 +315,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Mon Jan 02 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2017.0.0.1197-1.1.R
+- update to 2017SP0
+
 * Fri Jul 08 2016 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2016.3.0.4050-1.1.R
 - update to 2016SP2
 
