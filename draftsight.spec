@@ -1,6 +1,6 @@
 %define __os_install_post %{nil}
 %define debug_package %{nil}
-%define dsver 2017SP0
+%define dsver 2017SP02
 %define developer dassaultsystemes
 %global fix_rpath_errors 1
 %global manual_deps 1
@@ -8,7 +8,7 @@
 Summary:	Professional CAD system: supported file formats are DWT, DXF and DWG
 Summary(ru): 	Профессиональная САПР: поддерживаются форматы файлов DWT, DXF и DWG
 Name:		draftsight
-Version:	2017.0.0.1197
+Version:	2017.2.0.3085
 %if 0%{?fedora} >= 25
 Release:	1.1%{?dist}.R
 %else
@@ -315,6 +315,9 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
+* Thu May 18 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2017.2.0.3085-1.1.R
+- update to 2017SP02
+
 * Mon Jan 02 2017 carasin berlogue <carasin DOT berlogue AT mail DOT ru> - 2017.0.0.1197-1.1.R
 - update to 2017SP0
 
